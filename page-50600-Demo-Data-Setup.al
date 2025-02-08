@@ -27,6 +27,11 @@ page 50601 "Demo Data Setup"
 
     trigger OnOpenPage()
     begin
-        Rec.InsertIfNotExists();
+        Rec.Reset();
+        if not Rec.Get() then begin
+            Rec.Init();
+            Rec."Primary Key" := 'SETUP';
+            Rec.Insert();
+        end;
     end;
 }

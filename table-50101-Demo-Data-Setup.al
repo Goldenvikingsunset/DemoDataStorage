@@ -1,4 +1,4 @@
-table 50600 "Demo Data Setup"
+table 50601 "Demo Data Setup"
 {
     Caption = 'Demo Data Setup';
     DataClassification = CustomerContent;
@@ -16,22 +16,12 @@ table 50600 "Demo Data Setup"
             DataClassification = CustomerContent;
 
             trigger OnValidate()
+            var
+                MustStartWithHttpsErr: Label 'The Storage URL must start with https://';
             begin
                 if "Storage URL" <> '' then
                     if not "Storage URL".StartsWith('https://') then
                         Error(MustStartWithHttpsErr);
-            end;
-        }
-        field(3; "Default Package Name"; Text[250])
-        {
-            Caption = 'Default Package Name';
-            DataClassification = CustomerContent;
-
-            trigger OnValidate()
-            begin
-                if "Default Package Name" <> '' then
-                    if not "Default Package Name".EndsWith('.rapidstart') then
-                        Error(MustEndWithRapidstartErr);
             end;
         }
     }
@@ -44,14 +34,8 @@ table 50600 "Demo Data Setup"
         }
     }
 
-    var
-        MustEndWithRapidstartErr: Label 'The Package Name must end with .rapidstart';
-
-        MustStartWithHttpsErr: Label 'The Storage URL must start with https://';
-
-    procedure InsertIfNotExists()
+    procedure GetRecordOnce()
     begin
-        Reset();
         if not Get() then begin
             Init();
             "Primary Key" := 'SETUP';
